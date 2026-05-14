@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salle 7 · Casa de Apuestas del Mundial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #062a1f;
+    --green-dark: #0a3d2e;
+    --green-mid: #0f4a37;
+    --green-light: #1a5544;
+    --gold: #f4c542;
+    --gold-bright: #ffd95c;
+    --gold-dim: #c9a233;
+    --cream: #f5f1e8;
+    --red: #d64545;
+    --green-win: #5dcb6e;
+    --text-muted: #b8d4c9;
+    --text-dim: #7fa093;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--green-deep);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* LOGIN SCREEN */
+  .login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background:
+      radial-gradient(ellipse at top, rgba(244,197,66,0.08), transparent 60%),
+      var(--green-deep);
+  }
+  .login-card {
+    background: var(--green-dark);
+    border: 1px solid var(--green-light);
+    border-radius: 12px;
+    padding: 40px 32px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .logo-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--gold);
+    letter-spacing: 4px;
+    line-height: 1;
+    text-shadow: 0 2px 0 var(--green-deep);
+  }
+  .logo-sub {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .logo-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 14px auto 0;
+  }
+  .logo-currency {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+  }
+  .form-label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--green-deep);
+    border: 1px solid var(--green-light);
+    color: var(--cream);
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    margin-bottom: 18px;
+    transition: border 0.2s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .btn-primary {
+    width: 100%;
+    background: var(--gold);
+    color: var(--green-deep);
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary:hover { background: var(--gold-bright); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .login-help {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .login-help a { color: var(--gold); cursor: pointer; text-decoration: none; }
+
+  /* APP LAYOUT */
+  .app { display: none; min-height: 100vh; flex-direction: column; }
+  .app.active { display: flex; }
+  .header {
+    background: var(--green-deep);
+    border-bottom: 2px solid var(--gold);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 26px;
+    letter-spacing: 3px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .balance-pill {
+    background: var(--gold);
+    color: var(--green-deep);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .balance-coin {
+    width: 18px; height: 18px;
+    background: var(--green-deep);
+    color: var(--gold);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    line-height: 1;
+  }
+  .user-chip {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .logout-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--green-light);
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  .logout-btn:hover { color: var(--cream); border-color: var(--cream); }
+
+  /* TABS */
+  .tabs {
+    background: var(--green-dark);
+    display: flex;
+    border-bottom: 1px solid var(--green-light);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 14px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab:hover:not(.active) { color: var(--cream); }
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    padding: 20px;
+    max-width: 980px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* PROMO BANNER */
+  .promo {
+    background: linear-gradient(135deg, var(--green-light), var(--green-mid));
+    border: 1px dashed var(--gold);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .promo-tag {
+    background: var(--gold);
+    color: var(--green-deep);
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .promo-text { color: var(--cream); font-size: 14px; }
+
+  /* SECTION HEADER */
+  .section-title {
+    color: var(--text-muted);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--green-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--gold);
+    display: inline-block;
+  }
+
+  /* MATCH CARD */
+  .match {
+    background: var(--green-dark);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--green-light);
+    transition: border 0.2s;
+  }
+  .match.live { border-left-color: var(--red); }
+  .match-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .live-badge {
+    color: var(--red);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .live-badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+
+  .odds-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .odds-btn {
+    background: var(--green-deep);
+    border: 1px solid var(--green-light);
+    border-radius: 5px;
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: inherit;
+    color: inherit;
+  }
+  .odds-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .odds-btn:disabled { cursor: not-allowed; opacity: 0.4; }
+  .odds-btn:disabled:hover { border-color: var(--green-light); transform: none; }
+  .odds-btn.selected {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .odds-btn.selected .odds-team,
+  .odds-btn.selected .odds-value { color: var(--green-deep); }
+  .odds-team {
+    color: var(--cream);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    height: 18px;
+    overflow: hidden;
+  }
+  .odds-value {
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* BET SLIP MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    padding: 0;
+  }
+  .modal-overlay.active { display: flex; }
+  @media (min-width: 600px) { .modal-overlay { align-items: center; padding: 20px; } }
+  .modal {
+    background: var(--green-dark);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px 12px 0 0;
+    padding: 22px;
+    width: 100%;
+    max-width: 440px;
+    animation: slideUp 0.25s ease-out;
+  }
+  @media (min-width: 600px) { .modal { border-radius: 12px; border: 1px solid var(--gold); } }
+  @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .bet-detail {
+    background: var(--green-deep);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .bet-detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .bet-detail-row:last-child { margin-bottom: 0; }
+  .bet-detail-label { color: var(--text-muted); }
+  .bet-detail-value { color: var(--cream); font-weight: 500; }
+  .stake-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .stake-input {
+    flex: 1;
+    background: var(--green-deep);
+    border: 1px solid var(--green-light);
+    color: var(--cream);
+    padding: 12px;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .stake-input:focus { outline: none; border-color: var(--gold); }
+  .quick-stakes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .quick-stake {
+    background: var(--green-deep);
+    border: 1px solid var(--green-light);
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .quick-stake:hover { border-color: var(--gold); color: var(--cream); }
+  .potential-win {
+    background: var(--green-mid);
+    border-left: 3px solid var(--gold);
+    padding: 12px 14px;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .potential-win-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .potential-win-value {
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .modal-buttons { display: flex; gap: 10px; }
+  .btn-cancel {
+    flex: 1;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--green-light);
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+  .btn-confirm {
+    flex: 2;
+    background: var(--gold);
+    color: var(--green-deep);
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+  .btn-confirm:hover { background: var(--gold-bright); }
+  .btn-confirm:disabled { background: var(--green-light); color: var(--text-dim); cursor: not-allowed; }
+
+  /* HISTORY / RANKING */
+  .table-card {
+    background: var(--green-dark);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .table-row {
+    display: grid;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--green-light);
+    font-size: 14px;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row.header {
+    background: var(--green-deep);
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+  .history-row { grid-template-columns: 2fr 1.2fr 1fr 1fr; gap: 8px; align-items: center; }
+  .ranking-row { grid-template-columns: 40px 2fr 1fr 1fr; gap: 8px; align-items: center; }
+  .bet-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .status-pending { background: var(--green-light); color: var(--gold); }
+  .status-won { background: var(--green-win); color: var(--green-deep); }
+  .status-lost { background: var(--red); color: white; }
+  .rank-pos {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    text-align: center;
+  }
+  .rank-pos.gold { color: var(--gold-bright); }
+  .balance-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .balance-cell.broke { color: var(--red); }
+  .me-row {
+    background: rgba(244,197,66,0.08);
+    border-left: 3px solid var(--gold);
+  }
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+  }
+  .empty-state-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  /* ADMIN */
+  .admin-only { display: none; }
+  body.is-admin .admin-only { display: block; }
+  body.is-admin .tab.admin-only { display: inline-block; }
+  .admin-section { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 700px) { .admin-section { grid-template-columns: 1fr 1fr; } }
+  .admin-card {
+    background: var(--green-dark);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .admin-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    letter-spacing: 2px;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .admin-match {
+    background: var(--green-deep);
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .admin-match-title { color: var(--cream); margin-bottom: 8px; font-weight: 500; }
+  .admin-result-btns { display: flex; gap: 6px; }
+  .admin-result-btn {
+    flex: 1;
+    background: var(--green-light);
+    border: 1px solid transparent;
+    color: var(--cream);
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .admin-result-btn:hover { border-color: var(--gold); }
+  .admin-result-btn.set { background: var(--gold); color: var(--green-deep); font-weight: 700; }
+  .small-input {
+    background: var(--green-deep);
+    border: 1px solid var(--green-light);
+    color: var(--cream);
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    width: 100%;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .danger-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .danger-btn:hover { opacity: 0.9; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--green-light);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: 6px;
+    border-left: 3px solid var(--gold);
+    font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: transform 0.3s;
+    z-index: 200;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-left-color: var(--green-win); }
+  .toast.error { border-left-color: var(--red); }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--green-dark);
+    padding: 14px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+  .stat-value.red { color: var(--red); }
+  .stat-value.green { color: var(--green-win); }
+
+  .app-footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-top: 1px solid var(--green-light);
+    background: var(--green-deep);
+  }
+  .app-footer .footer-symbol {
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    margin-right: 4px;
+  }
+
+  .loan-banner {
+    background: linear-gradient(135deg, #4a1010, #6b1818);
+    border: 1px solid var(--red);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .loan-banner-icon {
+    width: 36px; height: 36px;
+    background: var(--red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .loan-banner-text { flex: 1; font-size: 13px; color: var(--cream); }
+  .loan-banner-text strong { font-size: 14px; }
+  .loan-banner-text > div { color: var(--text-muted); margin-top: 2px; }
+  .loan-banner-btn {
+    background: var(--gold);
+    color: var(--green-deep);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .loan-banner-btn:hover { background: var(--gold-bright); }
+  .loan-banner.debt {
+    background: linear-gradient(135deg, #3d1c0c, #5a2814);
+    border-color: var(--gold);
+  }
+  .loan-banner.debt .loan-banner-icon {
+    background: var(--gold);
+    color: var(--green-deep);
+  }
+  .loan-status-pending {
+    background: var(--green-mid);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="logo">
+      <div class="logo-main">SALLE 7</div>
+      <div class="logo-divider"></div>
+      <div class="logo-sub">Casa de Apuestas · Mundial 2026</div>
+      <div class="logo-currency">Moneda oficial: Sanchezitos (Ƶ)</div>
+    </div>
+    <label class="form-label">Usuario</label>
+    <input type="text" id="login-user" class="form-input" placeholder="nombre.apellido" autocomplete="off" autocapitalize="none">
+    <label class="form-label">Contraseña</label>
+    <input type="password" id="login-pass" class="form-input" placeholder="••••••••" autocomplete="off">
+    <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    <div class="login-help">
+      ¿Sos el profesor? Usá tu cuenta de admin.<br>
+      ¿Olvidaste tu contraseña? Hablá con tu profesor.
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app-screen">
+  <header class="header">
+    <div class="header-logo">SALLE 7</div>
+    <div class="header-right">
+      <div class="balance-pill" title="Sanchezitos: la moneda oficial de Salle 7">
+        <span class="balance-coin">Ƶ</span>
+        <span id="balance-value">0</span>
+      </div>
+      <span class="user-chip" id="user-chip">—</span>
+      <button class="logout-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-section="lobby">Partidos</button>
+    <button class="tab" data-section="history">Mi historial</button>
+    <button class="tab" data-section="ranking">Ranking</button>
+    <button class="tab admin-only" data-section="admin">Admin</button>
+  </nav>
+
+  <main class="content">
+    <!-- LOBBY -->
+    <section class="section active" id="section-lobby">
+      <div class="loan-banner" id="loan-banner" style="display:none">
+        <div class="loan-banner-icon">!</div>
+        <div class="loan-banner-text">
+          <strong id="loan-banner-title">¿Te quedaste sin fondos?</strong>
+          <div id="loan-banner-sub">Pedile un préstamo al profesor y seguí en el juego.</div>
+        </div>
+        <button class="loan-banner-btn" onclick="openLoanModal()">Pedir préstamo</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-balance">0</div><div class="stat-label">Sanchezitos (Ƶ)</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div class="stat-label">Apuestas activas</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-net">0</div><div class="stat-label">Ganancia neta</div></div>
+      </div>
+
+      <div class="section-title">Próximos partidos</div>
+      <div id="matches-list"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="section" id="section-history">
+      <div class="section-title">Tu historial</div>
+      <div class="table-card" id="history-list"></div>
+    </section>
+
+    <!-- RANKING -->
+    <section class="section" id="section-ranking">
+      <div class="section-title">Ranking de la clase</div>
+      <div class="table-card" id="ranking-list"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="section admin-only" id="section-admin">
+      <div class="section-title">Panel del profesor</div>
+      <div class="admin-section">
+
+        <div class="admin-card">
+          <h3>Crear estudiante</h3>
+          <input class="small-input" id="adm-stu-name" placeholder="Nombre completo (Ej: Mariana López)" autocomplete="off">
+          <input class="small-input" id="adm-stu-email" placeholder="Correo (opcional, para Fase 2)" autocomplete="off">
+          <input class="small-input" id="adm-stu-klass" placeholder="Clase (Ej: Seconde A)" autocomplete="off">
+          <button class="btn-confirm" style="width:100%" onclick="createStudent()">Crear cuenta</button>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--green-light)">
+            <label class="form-label">Crear varios estudiantes a la vez</label>
+            <textarea class="small-input" id="adm-stu-bulk" rows="4" style="resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12px" placeholder="Mariana López, mariana@ejemplo.com, Seconde A&#10;Carlos Pérez, carlos@ejemplo.com, Seconde A&#10;..."></textarea>
+            <button class="btn-confirm" style="width:100%" onclick="bulkCreateStudents()">Crear en lote</button>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:6px">Una línea por estudiante. Formato: Nombre, correo, clase</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Solicitudes de préstamo
+            <span id="loan-badge" style="background:var(--red);color:white;border-radius:10px;padding:2px 8px;font-size:11px;margin-left:8px;display:none"></span>
+          </h3>
+          <div id="admin-loans"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Resolver partidos</h3>
+          <div id="admin-matches"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Agregar partido</h3>
+          <input class="small-input" id="adm-home" placeholder="Equipo local">
+          <input class="small-input" id="adm-away" placeholder="Equipo visitante">
+          <input class="small-input" id="adm-date" placeholder="Fecha (Ej: Sáb 13 jun · 14:00)">
+          <input class="small-input" id="adm-group" placeholder="Grupo o fase (Ej: Grupo C)">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+            <input class="small-input" id="adm-odd-h" placeholder="Cuota local" type="number" step="0.01" style="margin:0">
+            <input class="small-input" id="adm-odd-d" placeholder="Cuota empate" type="number" step="0.01" style="margin:0">
+            <input class="small-input" id="adm-odd-a" placeholder="Cuota visitante" type="number" step="0.01" style="margin:0">
+          </div>
+          <button class="btn-confirm" style="width:100%" onclick="addMatch()">Agregar partido</button>
+        </div>
+
+        <div class="admin-card">
+          <h3>Estudiantes</h3>
+          <div id="admin-students"></div>
+        </div>
+
+        <div class="admin-card">
+          <h3>Configuración</h3>
+          <label class="form-label">Saldo inicial para nuevos estudiantes</label>
+          <input class="small-input" id="adm-initial" type="number">
+          <button class="btn-confirm" style="width:100%;margin-bottom:14px" onclick="saveInitial()">Guardar</button>
+          <label class="form-label">Exportar datos para análisis</label>
+          <button class="btn-confirm" style="width:100%;background:var(--green-mid);color:var(--cream);margin-bottom:14px" onclick="exportData()">Descargar CSV</button>
+          <label class="form-label">Resetear todo (¡cuidado!)</label>
+          <button class="danger-btn" onclick="resetAll()">Borrar todos los datos</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="app-footer">
+    <span class="footer-symbol">Ƶ</span> Salle 7 · Casa de Apuestas del Mundial · Moneda oficial: Sanchezitos
+  </footer>
+</div>
+
+<!-- BET SLIP MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Confirmá tu apuesta</div>
+    <div class="bet-detail">
+      <div class="bet-detail-row"><span class="bet-detail-label">Partido</span><span class="bet-detail-value" id="modal-match"></span></div>
+      <div class="bet-detail-row"><span class="bet-detail-label">Apostás a</span><span class="bet-detail-value" id="modal-pick"></span></div>
+      <div class="bet-detail-row"><span class="bet-detail-label">Cuota</span><span class="bet-detail-value mono" id="modal-odd"></span></div>
+    </div>
+    <label class="form-label">¿Cuántos Sanchezitos apostás? (Ƶ)</label>
+    <div class="stake-row">
+      <input type="number" class="stake-input" id="stake-input" min="1" placeholder="0">
+    </div>
+    <div class="quick-stakes">
+      <button class="quick-stake" onclick="setStake(1000)">1,000</button>
+      <button class="quick-stake" onclick="setStake(2000)">2,000</button>
+      <button class="quick-stake" onclick="setStake(5000)">5,000</button>
+      <button class="quick-stake" onclick="setStake('all')">Todo</button>
+    </div>
+    <div class="potential-win">
+      <span class="potential-win-label">Ganancia si acertás</span>
+      <span class="potential-win-value mono" id="potential-win">0</span>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" id="confirm-bet" onclick="confirmBet()">Apostar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOAN MODAL -->
+<div class="modal-overlay" id="loan-modal">
+  <div class="modal">
+    <div class="modal-title">Pedir préstamo al profesor</div>
+    <div class="bet-detail" style="background:var(--green-mid);border-left:3px solid var(--red);padding:14px">
+      <div style="font-size:13px;color:var(--cream);line-height:1.5">
+        Los préstamos tienen <strong style="color:var(--gold)">25% de interés</strong>. Si pedís Ƶ 1,000, te debés Ƶ 1,250. Las ganancias de tus apuestas se descontarán automáticamente para pagar la deuda.
+      </div>
+    </div>
+    <label class="form-label">¿Cuántos Sanchezitos pedís?</label>
+    <input type="number" class="stake-input" id="loan-amount" min="100" max="50000" placeholder="Ej: 2000" oninput="updateLoanPreview()">
+    <div class="quick-stakes">
+      <button class="quick-stake" onclick="document.getElementById('loan-amount').value=1000;updateLoanPreview()">1,000</button>
+      <button class="quick-stake" onclick="document.getElementById('loan-amount').value=2500;updateLoanPreview()">2,500</button>
+      <button class="quick-stake" onclick="document.getElementById('loan-amount').value=5000;updateLoanPreview()">5,000</button>
+      <button class="quick-stake" onclick="document.getElementById('loan-amount').value=10000;updateLoanPreview()">10,000</button>
+    </div>
+    <div class="potential-win" style="margin-top:14px;border-left-color:var(--red)">
+      <div>
+        <div class="potential-win-label">Recibís</div>
+        <div class="potential-win-value mono" id="loan-preview-receive">0</div>
+      </div>
+      <div style="text-align:right">
+        <div class="potential-win-label">Pero deberás</div>
+        <div class="potential-win-value mono" id="loan-preview-owe" style="color:var(--red)">0</div>
+      </div>
+    </div>
+    <div class="modal-buttons" style="margin-top:16px">
+      <button class="btn-cancel" onclick="closeLoanModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="requestLoan()">Enviar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PROF_CODE = '__PROF__';
+const DEFAULT_INITIAL = 5000;
+const CURRENCY_SYMBOL = 'Ƶ';
+const LOAN_INTEREST = 0.25;
+
+const SEED_MATCHES = [
+  { id: 'm1', home: 'Argentina', away: 'Arabia Saudita', group: 'Grupo C', date: 'Sáb 13 jun · 14:00', odds: { home: 1.30, draw: 5.50, away: 9.00 } },
+  { id: 'm2', home: 'Francia', away: 'Dinamarca', group: 'Grupo D', date: 'Sáb 13 jun · 17:00', odds: { home: 1.80, draw: 3.40, away: 4.50 } },
+  { id: 'm3', home: 'Brasil', away: 'Suiza', group: 'Grupo G', date: 'Dom 14 jun · 11:00', odds: { home: 1.50, draw: 4.00, away: 6.50 } },
+  { id: 'm4', home: 'España', away: 'Alemania', group: 'Grupo E', date: 'Dom 14 jun · 14:00', odds: { home: 2.20, draw: 3.20, away: 3.10 } },
+  { id: 'm5', home: 'Costa Rica', away: 'Japón', group: 'Grupo H', date: 'Dom 14 jun · 17:00', odds: { home: 4.50, draw: 3.40, away: 1.85 } },
+  { id: 'm6', home: 'Inglaterra', away: 'Países Bajos', group: 'Grupo B', date: 'Lun 15 jun · 14:00', odds: { home: 2.50, draw: 3.20, away: 2.80 } },
+];
+
+let state = {
+  currentUser: null,
+  isProf: false,
+  users: {},
+  matches: [],
+  bets: [],
+  loans: [],
+  initialBalance: DEFAULT_INITIAL,
+  pendingBet: null,
+};
+
+function load() {
+  const saved = localStorage.getItem('salle7_state');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      state.users = parsed.users || {};
+      state.matches = parsed.matches && parsed.matches.length ? parsed.matches : [...SEED_MATCHES];
+      state.bets = parsed.bets || [];
+      state.initialBalance = parsed.initialBalance || DEFAULT_INITIAL;
+      state.loans = parsed.loans || [];
+    } catch(e) {
+      state.matches = [...SEED_MATCHES];
+    }
+  } else {
+    state.matches = [...SEED_MATCHES];
+  }
+  if (!state.users['profe']) {
+    state.users['profe'] = {
+      username: 'profe',
+      fullName: 'Profesor',
+      email: '',
+      klass: '',
+      password: 'salle7',
+      balance: 0,
+      isProf: true,
+      joined: Date.now(),
+    };
+    save();
+  }
+}
+
+function save() {
+  localStorage.setItem('salle7_state', JSON.stringify({
+    users: state.users,
+    matches: state.matches,
+    bets: state.bets,
+    initialBalance: state.initialBalance,
+    loans: state.loans,
+  }));
+}
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim().toLowerCase();
+  const password = document.getElementById('login-pass').value;
+  if (!username) { toast('Ingresá tu usuario', 'error'); return; }
+  if (!password) { toast('Ingresá tu contraseña', 'error'); return; }
+
+  const user = state.users[username];
+  if (!user) { toast('Usuario no existe. Hablá con tu profesor.', 'error'); return; }
+  if (user.password !== password) { toast('Contraseña incorrecta', 'error'); return; }
+
+  state.currentUser = username;
+  state.isProf = user.isProf === true;
+  if (state.isProf) document.body.classList.add('is-admin');
+  else document.body.classList.remove('is-admin');
+
+  localStorage.setItem('salle7_user', state.currentUser);
+  showApp();
+}
+
+function doLogout() {
+  state.currentUser = null;
+  state.isProf = false;
+  document.body.classList.remove('is-admin');
+  localStorage.removeItem('salle7_user');
+  document.getElementById('app-screen').classList.remove('active');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  resetTabToLobby();
+}
+
+function resetTabToLobby() {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
+  const lobbyTab = document.querySelector('.tab[data-section="lobby"]');
+  if (lobbyTab) lobbyTab.classList.add('active');
+  const lobbySection = document.getElementById('section-lobby');
+  if (lobbySection) lobbySection.classList.add('active');
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').classList.add('active');
+  resetTabToLobby();
+  const u = state.users[state.currentUser];
+  if (state.isProf) {
+    document.getElementById('user-chip').textContent = u.fullName + ' (profe)';
+    document.querySelector('.balance-pill').style.display = 'none';
+  } else {
+    document.getElementById('user-chip').textContent = u.fullName;
+    document.querySelector('.balance-pill').style.display = 'flex';
+  }
+  renderAll();
+}
+
+function currentBalance() {
+  if (state.isProf || !state.currentUser) return 0;
+  const u = state.users[state.currentUser];
+  return u ? u.balance : 0;
+}
+
+function getActiveDebt(userKey) {
+  return state.loans
+    .filter(l => l.user === userKey && l.status === 'approved' && l.remaining > 0)
+    .reduce((s, l) => s + l.remaining, 0);
+}
+
+function payDebt(userKey, amount) {
+  let remaining = amount;
+  const debts = state.loans
+    .filter(l => l.user === userKey && l.status === 'approved' && l.remaining > 0)
+    .sort((a,b) => a.approved - b.approved);
+  for (const debt of debts) {
+    if (remaining <= 0) break;
+    const payment = Math.min(remaining, debt.remaining);
+    debt.remaining -= payment;
+    debt.totalPaid = (debt.totalPaid || 0) + payment;
+    remaining -= payment;
+    if (debt.remaining === 0) debt.fullyPaid = Date.now();
+  }
+  return amount - remaining;
+}
+
+function renderAll() {
+  renderBalance();
+  renderMatches();
+  renderHistory();
+  renderRanking();
+  if (state.isProf) renderAdmin();
+}
+
+function renderBalance() {
+  if (state.isProf) return;
+  const bal = currentBalance();
+  document.getElementById('balance-value').textContent = bal.toLocaleString('es-CR');
+  document.getElementById('stat-balance').textContent = bal.toLocaleString('es-CR');
+  const myBets = state.bets.filter(b => b.user === state.currentUser);
+  const pending = myBets.filter(b => b.status === 'pending').length;
+  document.getElementById('stat-pending').textContent = pending;
+  const u = state.users[state.currentUser];
+  if (!u) return;
+  const debt = getActiveDebt(state.currentUser);
+  const pendingStake = myBets.filter(b => b.status === 'pending').reduce((s,b) => s + b.stake, 0);
+  const net = bal + pendingStake - debt - state.initialBalance;
+  const netEl = document.getElementById('stat-net');
+  netEl.textContent = (net >= 0 ? '+' : '−') + Math.abs(net).toLocaleString('es-CR');
+  netEl.className = 'stat-value ' + (net > 0 ? 'green' : net < 0 ? 'red' : '');
+
+  const banner = document.getElementById('loan-banner');
+  const pendingLoan = state.loans.find(l => l.user === state.currentUser && l.status === 'pending');
+  const lowFunds = bal < 500;
+
+  if (pendingLoan) {
+    banner.style.display = 'flex';
+    banner.classList.remove('debt');
+    document.getElementById('loan-banner-title').textContent = 'Solicitud de préstamo enviada';
+    document.getElementById('loan-banner-sub').textContent = `Pediste Ƶ ${pendingLoan.amount.toLocaleString('es-CR')}. El profesor está revisando.`;
+    banner.querySelector('.loan-banner-btn').style.display = 'none';
+  } else if (debt > 0) {
+    banner.style.display = 'flex';
+    banner.classList.add('debt');
+    document.getElementById('loan-banner-title').textContent = `Tenés una deuda activa de Ƶ ${debt.toLocaleString('es-CR')}`;
+    document.getElementById('loan-banner-sub').textContent = 'Cada apuesta que ganés se descontará automáticamente para pagar tu deuda.';
+    banner.querySelector('.loan-banner-btn').style.display = lowFunds ? 'block' : 'none';
+    banner.querySelector('.loan-banner-btn').textContent = 'Pedir otro';
+  } else if (lowFunds) {
+    banner.style.display = 'flex';
+    banner.classList.remove('debt');
+    document.getElementById('loan-banner-title').textContent = bal === 0 ? '¡Te quedaste sin Sanchezitos!' : 'Tu saldo está bajo';
+    document.getElementById('loan-banner-sub').textContent = 'Pedile un préstamo al profesor y seguí en el juego.';
+    const btn = banner.querySelector('.loan-banner-btn');
+    btn.style.display = 'block';
+    btn.textContent = 'Pedir préstamo';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function renderMatches() {
+  const list = document.getElementById('matches-list');
+  const open = state.matches.filter(m => !m.result);
+  if (!open.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-title">No hay partidos abiertos</div><div>Volvé pronto.</div></div>';
+    return;
+  }
+  list.innerHTML = open.map(m => `
+    <div class="match">
+      <div class="match-meta">
+        <span>${m.group} · ${m.date}</span>
+        ${m.live ? '<span class="live-badge">EN VIVO</span>' : ''}
+      </div>
+      <div class="odds-grid">
+        <button class="odds-btn" ${state.isProf ? 'disabled' : ''} onclick="openBet('${m.id}','home')">
+          <div class="odds-team">${m.home}</div>
+          <div class="odds-value">${m.odds.home.toFixed(2)}</div>
+        </button>
+        <button class="odds-btn" ${state.isProf ? 'disabled' : ''} onclick="openBet('${m.id}','draw')">
+          <div class="odds-team">Empate</div>
+          <div class="odds-value">${m.odds.draw.toFixed(2)}</div>
+        </button>
+        <button class="odds-btn" ${state.isProf ? 'disabled' : ''} onclick="openBet('${m.id}','away')">
+          <div class="odds-team">${m.away}</div>
+          <div class="odds-value">${m.odds.away.toFixed(2)}</div>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openBet(matchId, pick) {
+  if (state.isProf) return;
+  const m = state.matches.find(x => x.id === matchId);
+  if (!m) return;
+  const pickLabel = pick === 'home' ? m.home : pick === 'away' ? m.away : 'Empate';
+  state.pendingBet = { matchId, pick, odd: m.odds[pick] };
+  document.getElementById('modal-match').textContent = `${m.home} vs ${m.away}`;
+  document.getElementById('modal-pick').textContent = pickLabel;
+  document.getElementById('modal-odd').textContent = m.odds[pick].toFixed(2);
+  document.getElementById('stake-input').value = '';
+  document.getElementById('potential-win').textContent = '0';
+  document.getElementById('modal').classList.add('active');
+  setTimeout(() => document.getElementById('stake-input').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  state.pendingBet = null;
+}
+
+function setStake(v) {
+  const input = document.getElementById('stake-input');
+  if (v === 'all') input.value = currentBalance();
+  else input.value = v;
+  updatePotential();
+}
+
+function updatePotential() {
+  const stake = parseInt(document.getElementById('stake-input').value) || 0;
+  if (state.pendingBet) {
+    const win = Math.round(stake * state.pendingBet.odd);
+    document.getElementById('potential-win').textContent = win.toLocaleString('es-CR');
+  }
+}
+
+function confirmBet() {
+  const stake = parseInt(document.getElementById('stake-input').value) || 0;
+  if (stake < 1) { toast('Apostá al menos 1 Sanchezito', 'error'); return; }
+  if (stake > currentBalance()) { toast('No tenés suficientes Sanchezitos', 'error'); return; }
+  if (!state.pendingBet) return;
+  const u = state.users[state.currentUser];
+  u.balance -= stake;
+  state.bets.push({
+    id: 'b' + Date.now(),
+    user: state.currentUser,
+    matchId: state.pendingBet.matchId,
+    pick: state.pendingBet.pick,
+    odd: state.pendingBet.odd,
+    stake,
+    status: 'pending',
+    timestamp: Date.now(),
+  });
+  save();
+  closeModal();
+  toast(`Apuesta de ${stake} Sanchezitos confirmada · ¡Suerte!`, 'success');
+  renderAll();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  if (state.isProf) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-title">Vista profesor</div><div>Mirá el panel admin.</div></div>';
+    return;
+  }
+  const myBets = state.bets.filter(b => b.user === state.currentUser).map(x => ({...x, type: 'bet'}));
+  const myLoans = state.loans.filter(l => l.user === state.currentUser).map(x => ({...x, type: 'loan', timestamp: x.requested}));
+  const items = [...myBets, ...myLoans].sort((a,b) => b.timestamp - a.timestamp);
+
+  if (!items.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-title">Sin actividad todavía</div><div>Andá a "Partidos" y hacé tu primera apuesta.</div></div>';
+    return;
+  }
+  list.innerHTML = `
+    <div class="table-row history-row header">
+      <div>Evento</div><div>Detalle</div><div>Monto</div><div>Estado</div>
+    </div>
+    ${items.map(it => {
+      if (it.type === 'loan') {
+        let statusHtml, detailHtml;
+        if (it.status === 'pending') {
+          statusHtml = '<span class="bet-status status-pending">En espera</span>';
+          detailHtml = 'Esperando aprobación';
+        } else if (it.status === 'rejected') {
+          statusHtml = '<span class="bet-status status-lost">Rechazado</span>';
+          detailHtml = 'No aprobado';
+        } else {
+          const paid = it.totalPaid || 0;
+          const fullyPaid = it.remaining === 0;
+          statusHtml = fullyPaid
+            ? '<span class="bet-status status-won">Pagado</span>'
+            : `<span class="bet-status" style="background:var(--gold);color:var(--green-deep)">Debe Ƶ ${it.remaining.toLocaleString('es-CR')}</span>`;
+          detailHtml = `Total a pagar: Ƶ ${it.totalDue.toLocaleString('es-CR')}<div style="color:var(--text-dim);font-size:11px;margin-top:2px">Pagado: Ƶ ${paid.toLocaleString('es-CR')}</div>`;
+        }
+        return `<div class="table-row history-row" style="background:rgba(214,69,69,0.06)">
+          <div style="color:var(--red)">💰 Préstamo<div style="color:var(--text-dim);font-size:11px;margin-top:2px;font-weight:400">+25% interés</div></div>
+          <div>${detailHtml}</div>
+          <div class="mono" style="color:var(--red)">+${it.amount.toLocaleString('es-CR')}</div>
+          <div>${statusHtml}</div>
+        </div>`;
+      }
+      const b = it;
+      const m = state.matches.find(x => x.id === b.matchId);
+      if (!m) return '';
+      const pickLabel = b.pick === 'home' ? m.home : b.pick === 'away' ? m.away : 'Empate';
+      let statusHtml = '';
+      if (b.status === 'pending') statusHtml = '<span class="bet-status status-pending">Pendiente</span>';
+      else if (b.status === 'won') {
+        const totalWon = Math.round(b.stake * b.odd);
+        if (b.paidToDebt && b.paidToDebt > 0) {
+          statusHtml = `<span class="bet-status status-won">+${totalWon.toLocaleString('es-CR')}</span><div style="color:var(--text-dim);font-size:10px;margin-top:3px">Ƶ ${b.paidToDebt.toLocaleString('es-CR')} → deuda<br>Ƶ ${(b.paidToBalance||0).toLocaleString('es-CR')} → saldo</div>`;
+        } else {
+          statusHtml = `<span class="bet-status status-won">+${totalWon.toLocaleString('es-CR')}</span>`;
+        }
+      }
+      else statusHtml = '<span class="bet-status status-lost">Perdida</span>';
+      return `<div class="table-row history-row">
+        <div>${m.home} vs ${m.away}<div style="color:var(--text-dim);font-size:11px;margin-top:2px">${m.date}</div></div>
+        <div>${pickLabel}<div style="color:var(--text-dim);font-size:11px;margin-top:2px">@${b.odd.toFixed(2)}</div></div>
+        <div class="mono">${b.stake.toLocaleString('es-CR')}</div>
+        <div>${statusHtml}</div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function renderRanking() {
+  const list = document.getElementById('ranking-list');
+  const users = Object.entries(state.users)
+    .filter(([k, u]) => !u.isProf)
+    .map(([key, u]) => {
+      const pending = state.bets.filter(b => b.user === key && b.status === 'pending').reduce((s,b) => s + b.stake, 0);
+      const debt = getActiveDebt(key);
+      return { key, ...u, pending, debt, total: u.balance + pending - debt };
+    })
+    .sort((a,b) => b.total - a.total);
+  if (!users.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-state-title">No hay estudiantes todavía</div><div>El profesor debe crear las cuentas primero.</div></div>';
+    return;
+  }
+  list.innerHTML = `
+    <div class="table-row ranking-row header">
+      <div>#</div><div>Estudiante</div><div>Sanchezitos</div><div>Posición neta</div>
+    </div>
+    ${users.map((u, i) => {
+      const isMe = u.key === state.currentUser;
+      const rankClass = i === 0 ? 'gold' : '';
+      const broke = u.total <= 0 ? 'broke' : '';
+      const debtBadge = u.debt > 0 ? `<div style="color:var(--red);font-size:11px;margin-top:2px">Debe Ƶ ${u.debt.toLocaleString('es-CR')}</div>` : '';
+      return `<div class="table-row ranking-row ${isMe ? 'me-row' : ''}">
+        <div class="rank-pos ${rankClass}">${i+1}</div>
+        <div>${u.fullName}<div style="color:var(--text-dim);font-size:11px;margin-top:2px">${u.klass}</div>${debtBadge}</div>
+        <div class="balance-cell ${u.balance <= 0 ? 'broke' : ''}">${u.balance.toLocaleString('es-CR')}</div>
+        <div class="balance-cell ${broke}">${(u.total >= 0 ? '' : '−') + Math.abs(u.total).toLocaleString('es-CR')}</div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function renderAdmin() {
+  const matches = document.getElementById('admin-matches');
+  matches.innerHTML = state.matches.map(m => {
+    const pending = state.bets.filter(b => b.matchId === m.id && b.status === 'pending').length;
+    return `<div class="admin-match">
+      <div class="admin-match-title">${m.home} vs ${m.away}<div style="color:var(--text-dim);font-size:11px;font-weight:400;margin-top:2px">${m.date} · ${pending} apuesta(s) activa(s)${m.result ? ' · YA RESUELTO' : ''}</div></div>
+      <div class="admin-result-btns">
+        <button class="admin-result-btn ${m.result==='home'?'set':''}" onclick="resolveMatch('${m.id}','home')">Gana ${m.home}</button>
+        <button class="admin-result-btn ${m.result==='draw'?'set':''}" onclick="resolveMatch('${m.id}','draw')">Empate</button>
+        <button class="admin-result-btn ${m.result==='away'?'set':''}" onclick="resolveMatch('${m.id}','away')">Gana ${m.away}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const studs = document.getElementById('admin-students');
+  const users = Object.entries(state.users).filter(([k, u]) => !u.isProf);
+  if (!users.length) {
+    studs.innerHTML = '<div style="color:var(--text-dim);font-size:13px">Todavía no hay estudiantes. Creá uno arriba ↑</div>';
+  } else {
+    studs.innerHTML = users.map(([k, u]) => {
+      const totalDebt = getActiveDebt(k);
+      const totalLoansApproved = state.loans.filter(l => l.user === k && l.status === 'approved').length;
+      return `
+      <div class="admin-match">
+        <div class="admin-match-title">${u.fullName}
+          <div style="color:var(--text-dim);font-size:11px;font-weight:400;margin-top:4px">
+            Usuario: <span style="font-family:'JetBrains Mono',monospace;color:var(--cream)">${k}</span><br>
+            Contraseña: <span id="pwd-${k}" style="font-family:'JetBrains Mono',monospace;color:var(--cream);letter-spacing:1px">••••••••</span>
+            <button onclick="togglePassword('${k}')" id="pwd-btn-${k}" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:11px;padding:0 6px;text-decoration:underline">mostrar</button><br>
+            ${u.klass} · Saldo: Ƶ ${u.balance.toLocaleString('es-CR')}${totalDebt > 0 ? ` · <span style="color:var(--red)">Debe: Ƶ ${totalDebt.toLocaleString('es-CR')}</span>` : ''}${totalLoansApproved > 0 ? ` · ${totalLoansApproved} pr\u00e9stamo(s)` : ''}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <input class="small-input" type="number" placeholder="Ajustar saldo" id="adj-${k}" style="margin:0;flex:1;min-width:120px">
+          <button class="admin-result-btn" style="flex:0 0 auto;padding:8px 14px" onclick="adjustBalance('${k}',1)" title="Sumar">+</button>
+          <button class="admin-result-btn" style="flex:0 0 auto;padding:8px 14px" onclick="adjustBalance('${k}',-1)" title="Restar">−</button>
+          <button class="admin-result-btn" style="flex:0 0 auto;padding:8px 14px;background:var(--green-mid)" onclick="resetPassword('${k}')" title="Nueva contrase\u00f1a">🔑</button>
+          <button class="admin-result-btn" style="flex:0 0 auto;padding:8px 14px;background:var(--red);color:white" onclick="deleteStudent('${k}')" title="Borrar">×</button>
+        </div>
+      </div>
+    `;}).join('');
+  }
+
+  const loans = document.getElementById('admin-loans');
+  const pendingLoans = state.loans.filter(l => l.status === 'pending');
+  const badge = document.getElementById('loan-badge');
+  if (pendingLoans.length > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = pendingLoans.length;
+  } else {
+    badge.style.display = 'none';
+  }
+  if (!pendingLoans.length) {
+    loans.innerHTML = '<div style="color:var(--text-dim);font-size:13px">No hay solicitudes pendientes.</div>';
+  } else {
+    loans.innerHTML = pendingLoans.map(l => {
+      const u = state.users[l.user];
+      if (!u) return '';
+      const prev = state.loans.filter(x => x.user === l.user && x.status === 'approved').length;
+      return `<div class="admin-match">
+        <div class="admin-match-title">${u.fullName} pide Ƶ ${l.amount.toLocaleString('es-CR')}
+          <div style="color:var(--text-dim);font-size:11px;font-weight:400;margin-top:2px">
+            ${u.klass} · Saldo actual: Ƶ ${u.balance.toLocaleString('es-CR')}${prev > 0 ? ` · ⚠ Ya pidió ${prev} préstamo(s) antes` : ''}
+          </div>
+        </div>
+        <div class="admin-result-btns" style="margin-top:8px">
+          <button class="admin-result-btn set" onclick="approveLoan('${l.id}')">Aprobar</button>
+          <button class="admin-result-btn" style="background:var(--red);color:white" onclick="rejectLoan('${l.id}')">Rechazar</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('adm-initial').value = state.initialBalance;
+}
+
+function resolveMatch(matchId, result) {
+  const m = state.matches.find(x => x.id === matchId);
+  if (!m) return;
+  if (m.result) {
+    if (!confirm('Este partido ya está resuelto. ¿Cambiar el resultado? Las apuestas se recalcularán.')) return;
+    state.bets.forEach(b => {
+      if (b.matchId === matchId && b.status !== 'pending') {
+        if (b.status === 'won') {
+          const u = state.users[b.user];
+          if (u) {
+            u.balance -= (b.paidToBalance || 0);
+            if (b.paidToDebt) reverseDebtPayment(b.user, b.paidToDebt);
+          }
+        }
+        b.status = 'pending';
+        b.paidToBalance = 0;
+        b.paidToDebt = 0;
+        const u = state.users[b.user];
+        if (u) u.balance -= b.stake;
+      }
+    });
+  }
+  m.result = result;
+  state.bets.forEach(b => {
+    if (b.matchId === matchId && b.status === 'pending') {
+      if (b.pick === result) {
+        b.status = 'won';
+        const winnings = Math.round(b.stake * b.odd);
+        const u = state.users[b.user];
+        if (u) {
+          const paidToDebt = payDebt(b.user, winnings);
+          const toBalance = winnings - paidToDebt;
+          u.balance += toBalance;
+          b.paidToDebt = paidToDebt;
+          b.paidToBalance = toBalance;
+        }
+      } else {
+        b.status = 'lost';
+      }
+    }
+  });
+  save();
+  toast(`Partido resuelto: ${result==='home'?m.home:result==='away'?m.away:'Empate'}`, 'success');
+  renderAll();
+}
+
+function reverseDebtPayment(userKey, amount) {
+  let remaining = amount;
+  const debts = state.loans
+    .filter(l => l.user === userKey && l.status === 'approved' && l.totalPaid > 0)
+    .sort((a,b) => (b.fullyPaid || 0) - (a.fullyPaid || 0));
+  for (const debt of debts) {
+    if (remaining <= 0) break;
+    const restore = Math.min(remaining, debt.totalPaid);
+    debt.remaining += restore;
+    debt.totalPaid -= restore;
+    remaining -= restore;
+    if (debt.remaining > 0) delete debt.fullyPaid;
+  }
+}
+
+function addMatch() {
+  const home = document.getElementById('adm-home').value.trim();
+  const away = document.getElementById('adm-away').value.trim();
+  const date = document.getElementById('adm-date').value.trim();
+  const group = document.getElementById('adm-group').value.trim();
+  const oh = parseFloat(document.getElementById('adm-odd-h').value);
+  const od = parseFloat(document.getElementById('adm-odd-d').value);
+  const oa = parseFloat(document.getElementById('adm-odd-a').value);
+  if (!home || !away || !date || !group || !oh || !od || !oa) { toast('Llená todos los campos', 'error'); return; }
+  state.matches.push({
+    id: 'm' + Date.now(),
+    home, away, group, date,
+    odds: { home: oh, draw: od, away: oa },
+  });
+  save();
+  ['adm-home','adm-away','adm-date','adm-group','adm-odd-h','adm-odd-d','adm-odd-a'].forEach(id => document.getElementById(id).value = '');
+  toast('Partido agregado', 'success');
+  renderAll();
+}
+
+function adjustBalance(userKey, sign) {
+  const amt = parseInt(document.getElementById('adj-' + userKey).value) || 0;
+  if (amt <= 0) return;
+  state.users[userKey].balance += sign * amt;
+  save();
+  toast(`Saldo ajustado: ${sign>0?'+':'−'}${amt}`, 'success');
+  renderAll();
+}
+
+function saveInitial() {
+  const v = parseInt(document.getElementById('adm-initial').value);
+  if (!v || v < 0) { toast('Valor inválido', 'error'); return; }
+  state.initialBalance = v;
+  save();
+  toast('Saldo inicial guardado', 'success');
+}
+
+function normalizeUsername(fullName) {
+  return fullName
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z\s]/g, '')
+    .trim()
+    .split(/\s+/);
+}
+
+function capitalizeName(fullName) {
+  return fullName
+    .trim()
+    .split(/\s+/)
+    .map(word => {
+      if (word.length === 0) return '';
+      const lower = word.toLowerCase();
+      const particles = ['de', 'del', 'la', 'las', 'los', 'y', 'da', 'do', 'das', 'dos'];
+      if (particles.includes(lower)) return lower;
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(' ');
+}
+
+function generateUsername(fullName) {
+  const allParts = normalizeUsername(fullName);
+  if (allParts.length < 2) return allParts[0] || '';
+  const particles = ['de', 'del', 'la', 'las', 'los', 'y', 'da', 'do', 'das', 'dos'];
+  const parts = allParts.filter(p => !particles.includes(p));
+  if (parts.length < 2) return parts[0] || '';
+  const first = parts[0];
+  let last;
+  if (parts.length === 2) {
+    last = parts[1];
+  } else if (parts.length === 3) {
+    last = parts[1];
+  } else {
+    last = parts[2];
+  }
+  let base = first + '.' + last;
+  if (!state.users[base]) return base;
+  let n = 2;
+  while (state.users[base + n]) n++;
+  return base + n;
+}
+
+function generatePassword() {
+  const adj = ['rojo','azul','verde','dorado','rapido','lento','feliz','listo'];
+  const noun = ['gol','tiro','arco','balon','pase','jugada','equipo','copa'];
+  const num = Math.floor(Math.random() * 90) + 10;
+  return adj[Math.floor(Math.random()*adj.length)] + noun[Math.floor(Math.random()*noun.length)] + num;
+}
+
+function createStudent() {
+  const rawName = document.getElementById('adm-stu-name').value.trim();
+  const email = document.getElementById('adm-stu-email').value.trim();
+  const klass = document.getElementById('adm-stu-klass').value.trim();
+  if (!rawName) { toast('Falta el nombre', 'error'); return; }
+  if (!klass) { toast('Falta la clase', 'error'); return; }
+  const fullName = capitalizeName(rawName);
+  const username = generateUsername(fullName);
+  if (!username) { toast('Nombre inválido', 'error'); return; }
+  const password = generatePassword();
+  state.users[username] = {
+    username, fullName, email, klass, password,
+    balance: state.initialBalance,
+    isProf: false,
+    joined: Date.now(),
+  };
+  save();
+  ['adm-stu-name','adm-stu-email','adm-stu-klass'].forEach(id => document.getElementById(id).value = '');
+  toast(`Creado: ${username} (contraseña: ${password})`, 'success');
+  renderAll();
+}
+
+function bulkCreateStudents() {
+  const text = document.getElementById('adm-stu-bulk').value.trim();
+  if (!text) { toast('Pegá la lista primero', 'error'); return; }
+  const lines = text.split('\n').filter(l => l.trim());
+  let created = 0, errors = 0;
+  const newAccounts = [];
+  lines.forEach(line => {
+    const parts = line.split(',').map(s => s.trim());
+    const rawName = parts[0];
+    const email = parts[1] || '';
+    const klass = parts[2] || '';
+    if (!rawName || !klass) { errors++; return; }
+    const fullName = capitalizeName(rawName);
+    const username = generateUsername(fullName);
+    if (!username) { errors++; return; }
+    const password = generatePassword();
+    state.users[username] = {
+      username, fullName, email, klass, password,
+      balance: state.initialBalance,
+      isProf: false,
+      joined: Date.now(),
+    };
+    newAccounts.push({ fullName, username, password, klass, email });
+    created++;
+  });
+  save();
+  document.getElementById('adm-stu-bulk').value = '';
+  toast(`${created} estudiante(s) creado(s)${errors > 0 ? `, ${errors} error(es)` : ''}`, 'success');
+  if (newAccounts.length > 0) {
+    let csv = 'nombre,usuario,contrasena,clase,correo\n';
+    newAccounts.forEach(a => {
+      csv += `"${a.fullName}",${a.username},${a.password},"${a.klass}","${a.email}"\n`;
+    });
+    downloadCSV(csv, 'salle7_credenciales.csv');
+  }
+  renderAll();
+}
+
+function deleteStudent(userKey) {
+  const u = state.users[userKey];
+  if (!u) return;
+  if (!confirm(`¿Borrar la cuenta de ${u.fullName}? También se borran sus apuestas.`)) return;
+  delete state.users[userKey];
+  state.bets = state.bets.filter(b => b.user !== userKey);
+  state.loans = state.loans.filter(l => l.user !== userKey);
+  save();
+  toast('Estudiante eliminado', 'success');
+  renderAll();
+}
+
+function resetPassword(userKey) {
+  const u = state.users[userKey];
+  if (!u) return;
+  const newPass = generatePassword();
+  u.password = newPass;
+  save();
+  alert(`Nueva contraseña para ${u.fullName}:\n\n${newPass}\n\nAnotala y compartila con el estudiante.`);
+  renderAll();
+}
+
+function togglePassword(userKey) {
+  const span = document.getElementById('pwd-' + userKey);
+  const btn = document.getElementById('pwd-btn-' + userKey);
+  const u = state.users[userKey];
+  if (!span || !u) return;
+  if (span.textContent === '••••••••') {
+    span.textContent = u.password;
+    btn.textContent = 'ocultar';
+  } else {
+    span.textContent = '••••••••';
+    btn.textContent = 'mostrar';
+  }
+}
+
+function requestLoan() {
+  if (state.isProf) return;
+  const amount = parseInt(document.getElementById('loan-amount').value) || 0;
+  if (amount < 100) { toast('Pedí al menos Ƶ 100', 'error'); return; }
+  if (amount > 50000) { toast('Máximo Ƶ 50,000 por solicitud', 'error'); return; }
+  const existingPending = state.loans.find(l => l.user === state.currentUser && l.status === 'pending');
+  if (existingPending) { toast('Ya tenés una solicitud pendiente', 'error'); return; }
+  state.loans.push({
+    id: 'l' + Date.now(),
+    user: state.currentUser,
+    amount,
+    status: 'pending',
+    requested: Date.now(),
+  });
+  save();
+  closeLoanModal();
+  toast('Solicitud enviada al profesor', 'success');
+  renderAll();
+}
+
+function approveLoan(loanId) {
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return;
+  loan.status = 'approved';
+  loan.approved = Date.now();
+  loan.totalDue = Math.round(loan.amount * (1 + LOAN_INTEREST));
+  loan.remaining = loan.totalDue;
+  loan.totalPaid = 0;
+  loan.interest = LOAN_INTEREST;
+  const u = state.users[loan.user];
+  if (u) u.balance += loan.amount;
+  save();
+  toast(`Préstamo aprobado: Ƶ ${loan.amount.toLocaleString('es-CR')} (deuda: Ƶ ${loan.totalDue.toLocaleString('es-CR')})`, 'success');
+  renderAll();
+}
+
+function rejectLoan(loanId) {
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return;
+  loan.status = 'rejected';
+  loan.resolved = Date.now();
+  save();
+  toast('Préstamo rechazado', 'success');
+  renderAll();
+}
+
+function openLoanModal() {
+  document.getElementById('loan-amount').value = '';
+  updateLoanPreview();
+  document.getElementById('loan-modal').classList.add('active');
+}
+
+function closeLoanModal() {
+  document.getElementById('loan-modal').classList.remove('active');
+}
+
+function updateLoanPreview() {
+  const amt = parseInt(document.getElementById('loan-amount').value) || 0;
+  const due = Math.round(amt * (1 + LOAN_INTEREST));
+  document.getElementById('loan-preview-receive').textContent = 'Ƶ ' + amt.toLocaleString('es-CR');
+  document.getElementById('loan-preview-owe').textContent = 'Ƶ ' + due.toLocaleString('es-CR');
+}
+
+function downloadCSV(content, filename) {
+  const blob = new Blob(['\ufeff' + content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportData() {
+  let csv = 'estudiante,usuario,clase,saldo_actual,deuda_activa,apuestas_totales,apuestas_ganadas,apuestas_perdidas,total_apostado,total_ganado,ganancia_neta,prestamos_pedidos,prestamos_aprobados,total_prestado,total_a_pagar,total_pagado_de_deuda\n';
+  Object.entries(state.users).filter(([k,u]) => !u.isProf).forEach(([k, u]) => {
+    const myBets = state.bets.filter(b => b.user === k);
+    const won = myBets.filter(b => b.status === 'won');
+    const lost = myBets.filter(b => b.status === 'lost');
+    const totalStaked = myBets.reduce((s,b) => s + b.stake, 0);
+    const totalWon = won.reduce((s,b) => s + Math.round(b.stake * b.odd), 0);
+    const myLoans = state.loans.filter(l => l.user === k);
+    const approvedLoans = myLoans.filter(l => l.status === 'approved');
+    const totalBorrowed = approvedLoans.reduce((s,l) => s + l.amount, 0);
+    const totalDue = approvedLoans.reduce((s,l) => s + (l.totalDue || 0), 0);
+    const totalPaidDebt = approvedLoans.reduce((s,l) => s + (l.totalPaid || 0), 0);
+    const activeDebt = getActiveDebt(k);
+    const netGain = u.balance + myBets.filter(b => b.status === 'pending').reduce((s,b) => s + b.stake, 0) - activeDebt - state.initialBalance;
+    csv += `"${u.fullName}",${u.username},"${u.klass}",${u.balance},${activeDebt},${myBets.length},${won.length},${lost.length},${totalStaked},${totalWon},${netGain},${myLoans.length},${approvedLoans.length},${totalBorrowed},${totalDue},${totalPaidDebt}\n`;
+  });
+  downloadCSV(csv, `salle7_datos_${new Date().toISOString().slice(0,10)}.csv`);
+  toast('Datos exportados', 'success');
+}
+
+
+
+function resetAll() {
+  if (!confirm('¿BORRAR TODO? Esto elimina estudiantes, apuestas y resultados.')) return;
+  if (!confirm('¿Seguro? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem('salle7_state');
+  localStorage.removeItem('salle7_user');
+  location.reload();
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('section-' + t.dataset.section).classList.add('active');
+  });
+});
+
+document.getElementById('stake-input').addEventListener('input', updatePotential);
+
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+
+['login-user', 'login-pass'].forEach(id => {
+  document.getElementById(id).addEventListener('keypress', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+});
+
+load();
+const lastUser = localStorage.getItem('salle7_user');
+if (lastUser && state.users[lastUser]) {
+  state.currentUser = lastUser;
+  state.isProf = state.users[lastUser].isProf === true;
+  if (state.isProf) document.body.classList.add('is-admin');
+  showApp();
+}
+</script>
+
+</body>
+</html>
